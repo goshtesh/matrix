@@ -1,0 +1,26 @@
+{
+  "author": "1819 ventures",
+  "description": "Mass connect on LinkedIn.",
+  "manifest_version": 2,
+  "name": "Matrix for LinkedIn",
+  "homepage_url": "https://networktracking.wordpress.com/",
+  "version": "0",
+  "content_scripts": [{
+      "matches": ["https://www.linkedin.com/*"],
+      "js": ["content.js"]
+  }],
+  "browser_action": {
+    "default_icon": "images/1819_16.png",
+      "default_popup":"popup.html"
+  },
+  "icons": {
+    "16": "images/1819_16.png",
+    "48": "images/1819_48.png",
+    "128": "images/1819_128.png"
+  },
+
+  "permissions": [
+    "storage",
+    "tabs"
+  ]
+}
