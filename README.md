@@ -7,7 +7,7 @@ Before using this project, please consult the [Terms and Conditions](#terms-and-
 
 ## Install
 
-1. Click 'Download zip` from the code dropdown menu in the [repository](https://github.com/goshtesh/matrix) and unzip it.
+1. Click `Download zip` from the code dropdown menu in the [repository](https://github.com/goshtesh/matrix) and unzip it.
 2. Open Google Chrome, type `chrome://extensions` on your address bar and hit Enter.
 3. On the Chrome Extensions page, check the `Developer mode` box. New buttons will be displayed.
 4. Click on the button `Load unpacked`.
