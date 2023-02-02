@@ -2,15 +2,21 @@
 function popup() {
     chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
         var activeTab = tabs[0];
-        chrome.tabs.sendMessage(activeTab.id, { "message": "connectRequest" });
+        var connectFilter = document.getElementById("Connect-filter").value;
+        chrome.tabs.sendMessage(activeTab.id, { "message": "connectRequest", "connectFilter": connectFilter });
     });
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-    document.getElementById("ConnectAll").addEventListener("click", popup);
+    document.getElementById("SelectOptions").addEventListener("submit", popup);
 });
 
-
+function showDiv() {
+    document.getElementById('SelectOptions').style.display = "block";
+}
+document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById('ConnectAll').addEventListener("click", showDiv);
+});
 
 function messagepopup() {
     chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {

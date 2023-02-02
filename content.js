@@ -1,7 +1,7 @@
 chrome.runtime.onMessage.addListener(
     function (request, sender, sendResponse) {
         if (request.message === "connectRequest") {
-            connectCodeBlock();
+            connectCodeBlock(request.connectFilter);
         }
     }
 );
@@ -15,32 +15,51 @@ chrome.runtime.onMessage.addListener(
 );
 
 
-async function connectCodeBlock() {
-    let n_pages = 3
-    for (let x = 3; x < n_pages + 1; x++) {
-        await new Promise(r => setTimeout(r, 5000));
-        async function getElementsByXpath(xpathToExecute) {
-            var result = [];
-            var nodesSnapshot = document.evaluate(xpathToExecute, document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
-            for (var i = 0; i < nodesSnapshot.snapshotLength; i++) {
-                result.push(nodesSnapshot.snapshotItem(i));
+async function connectCodeBlock(filter) {
+    async function getElementsByXpath(xpathToExecute) {
+        var result = [];
+        var nodesSnapshot = document.evaluate(xpathToExecute, document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+        for (var i = 0; i < nodesSnapshot.snapshotLength; i++) {
+            result.push(nodesSnapshot.snapshotItem(i));
+        }
+        return result;
+    }
+
+    let all_buttons = await getElementsByXpath("//button/span[text()='Connect']/..");
+    await new Promise(r => setTimeout(r, 5000));
+
+    let connect_buttons = []
+    for (let btn of all_buttons) {
+        connect_buttons.push(btn)
+    }
+
+    await new Promise(r => setTimeout(r, 5000));
+    for (let btn of connect_buttons) {
+        btn.click()
+        await new Promise(r => setTimeout(r, 2000));
+        const sendInvite = document.getElementById("send-invite-modal").innerText
+        if (sendInvite.includes("Your invitation is almost on its way")) {
+            send = await getElementsByXpath("//button[@aria-label='Send now']")
+            send[0].click()
+            await new Promise(r => setTimeout(r, 2000));
+        } else if (sendInvite.includes("How do you know")) {
+            if (filter) {
+                searchFilter = "//button[text()=" + JSON.stringify(filter) + "]"
+            } else {
+                searchFilter = '//button[text()="Other"]'
             }
-            return result;
-        }
-        let all_buttons = await getElementsByXpath("//button/span[text()='Connect']/..");
-        let connect_buttons = []
-        for (let btn of all_buttons) {
-            connect_buttons.push(btn)
-        }
-        for (let btn of connect_buttons) {
-            btn.click()
+            const filterApply = await getElementsByXpath(searchFilter)
+            filterApply[0].click()
+            connect = await getElementsByXpath("//button[@aria-label='Connect']")
+            connect[0].click()
             await new Promise(r => setTimeout(r, 2000));
             send = await getElementsByXpath("//button[@aria-label='Send now']")
             send[0].click()
             await new Promise(r => setTimeout(r, 2000));
         }
-
     }
+
+
 }
 
 
@@ -98,7 +117,6 @@ async function messageCodeBlock(message) {
         let greetings_options = await getRandomInt(0, greetings.length);
         let newmessage = greetings[greetings_options] + " " + name + " " + message
         let subject = "Hello"
-        // type message
 
 
         let paragraphs = await getElementByXpath("//div[starts-with(@class, 'msg-form__contenteditable')]//p", main_div);
