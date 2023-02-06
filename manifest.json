@@ -3,7 +3,7 @@
   "description": "Mass connect on LinkedIn.",
   "manifest_version": 2,
   "name": "Matrix for LinkedIn",
-  "homepage_url": "https://networktracking.wordpress.com/",
+  "homepage_url": "https://github.com/goshtesh/matrix",
   "version": "0",
   "content_scripts": [{
       "matches": ["https://www.linkedin.com/*"],
