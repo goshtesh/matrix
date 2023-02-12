@@ -22,7 +22,7 @@ If this project helped you save time, you can buy me a cup of coffee :)
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/paypalme/goshtesh)
 
 ## Feedback
-We would love to improve this using your feedback. Please share them @ https://networktracking.wordpress.com/contact/
+We would love to improve this using your feedback. Please share them @ https://forms.gle/a4YzQbtcyQHYMpJi7
 ## Terms and Conditions
 
 By using this project, you agree to the following Terms and Conditions. We reserve the right to block any user of this repository that does not meet these conditions.
