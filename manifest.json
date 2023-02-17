@@ -13,6 +13,9 @@
     "default_icon": "images/1819_16.png",
       "default_popup":"popup.html"
   },
+  "background": {
+        "service_worker": "background.js"
+    },
   "icons": {
     "16": "images/1819_16.png",
     "48": "images/1819_48.png",
