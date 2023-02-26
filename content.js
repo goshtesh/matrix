@@ -45,10 +45,12 @@ async function connectCodeBlock(filter, count, connectCount) {
             btn.click()
             await new Promise(r => setTimeout(r, 2000));
             const sendInvite = document.getElementById("send-invite-modal").innerText
-            if (sendInvite.includes("Your invitation is almost on its way")) {
+            if (sendInvite.includes("Your invitation is almost on its way") || sendInvite.includes("You can customize this invitation")) {
                 send = await getElementsByXpath("//button[@aria-label='Send now']")
                 send[0].click()
+
                 await new Promise(r => setTimeout(r, 2000));
+                connectCount = connectCount + 1
             } else if (sendInvite.includes("How do you know")) {
                 if (filter) {
                     searchFilter = "//button[text()=" + JSON.stringify(filter) + "]"
@@ -63,8 +65,18 @@ async function connectCodeBlock(filter, count, connectCount) {
                 send = await getElementsByXpath("//button[@aria-label='Send now']")
                 send[0].click()
                 await new Promise(r => setTimeout(r, 2000));
+                connectCount = connectCount + 1
+
+            } else {
+                let close_button = await getElementByXpath("//button[contains(@class, 'artdeco-modal__dismiss')]//li-icon[@type='cancel-icon']", null);
+                close_button.click();
             }
-            connectCount = connectCount + 1
+            error_message = await getElementsByXpath("//div[contains(@class, 'artdeco-toasts_toasts')]")
+            if (error_message[0].getElementsByClassName('artdeco-toast-item').length > 0) {
+                let close_button = await getElementByXpath("//button[contains(@class, 'artdeco-toast-item__dismiss')]//li-icon[@type='cancel-icon']", null);
+                close_button.click();
+                connectCount = connectCount - 1
+            }
             if ((connectCount === count) || (connectCount > count)) {
                 break breakme;
             }
