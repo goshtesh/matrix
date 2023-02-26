@@ -1,50 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Popup</title>
-</head>
-<body style="width:400px">
+	<meta charset="UTF-8">
+	<title>Popup</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+	
+	<style>
+		html,
+		body {
+			width: 268px;
+			height: 180px;
+			border-radius: 10px;
+			background: #fff;
+			text-align: center;
+			margin: 0;
+			padding: 0;
+			font-family: 'Roboto', sans-serif;
+			font-size: 12px;
+			overflow: visible;
+		}
 
-<h2>Connect with your 2nd degree network</h2>
+		.container {
+			margin: 16px 16px 16px 16px;
+		}
+
+		h1 {
+			color: #000;
+			font-size: 16px;
+			padding-bottom: 8px;
+			margin: 0 !important;
+		}
+
+		.btn {
+			display: block;
+			height: 40px;
+			-webkit-border-radius: 4px;
+			-moz-border-radius: 4px;
+			border-radius: 4px;
+			text-decoration: none;
+			line-height: 40px;
+			font-size: 14px;
+			margin: auto;
+			cursor: pointer;
+		}
+
+		.btn.primary {
+			background: #2C4BFF;
+			color: #fff;
+		}
+
+		.btn.secondary {
+			border: 1px solid #B8B8B8;
+			color: #636363;
+		}
+
+		.buffer {
+			background: url('buffer-logo.svg') no-repeat;
+			width: 50px;
+			height: 12px;
+			display: block;
+			float: right;
+			clear: both;
+			margin-top: 8px;
+		}
+	</style>
+
+</head>
+<body>
+<div class="container">
+<h1>Connect with your 2nd degree</h1>
 <table id="people-table">
 </table>
+<button class="btn primary" id="ConnectAll">Start Connecting</button>
+</div>
 
-<button id="ConnectAll">Start Connecting</button>
-
+<div class="container">
 <form id="SelectOptions" style="display:none;" class="answer_list" >
   <div>
-  <label for="Connect-filter">How do you know the people you are connecting to? This step is optional</label>
+	<label for="Connect-filter">How do you know the people you are connecting to?</label>
   </div>
   <div>
-  <select id="Connect-filter">
-      <option value="">--Please choose an option.--</option>
-      <option value="Work Colleagues">Work Colleagues</option>
-      <option value="Classmates">Classmates</option>
-      <option value="Met at a work-related event">Met at a work-related event</option>
-      <option value="Other">Other</option>
-      <option value="We don't know each other">We don't know each other</option>
-  </select>
+	<select id="Connect-filter">
+		<option value="">--Please choose an option.--</option>
+		<option value="Work Colleagues">Work Colleagues</option>
+		<option value="Classmates">Classmates</option>
+		<option value="Met at a work-related event">Met at a work-related event</option>
+		<option value="Other">Other</option>
+		<option value="We don't know each other">We don't know each other</option>
+	</select>
   </div>
   <div>
-      <label for="ConnectionCount">How many people do you want to connect to</label>
+	<label for="ConnectionCount">How many people do you want to connect to</label>
   </div>
   <div>
-      <input id="ConnectionCount" type="number" />
+	<input id="ConnectionCount" type="number" />
   </div>
-  <input type="submit" value="Submit" />
+  <input class="btn" type="submit" value="Submit" />
 </form>
+</div>
 
+<div class="container">
 <form id="theForm">
-  <h2>Message your contacts</h2>
+  <h1>Mass Message contacts</h1>
   <div>
-    <input id="MessageAll" type="text" placeholder="Type "> Type the body of your message. We will autopopulate the greetings! </input>
+    <input id="MessageAll" type="text" placeholder="Type your message"></input>
+    <div>
+    <label for="MessageAll">We will autopopulate the greeting!</label>
+    </div>
   </div>
   <div>
-    <input type="submit" value="Submit" />
+    <input class="btn" type="submit" value="Submit" />
   </div>
 </form>
+</div>
 
+<div>    
+<a class="btn secondary" href='https://forms.gle/a4YzQbtcyQHYMpJi7' target="_blank">We would love to hear your feedback</a>
+</div>
 <script src="popup.js"></script>
 
 </body>
