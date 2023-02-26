@@ -78,17 +78,23 @@
 <div class="container">
 <form id="SelectOptions" style="display:none;" class="answer_list" >
   <div>
-  <label for="Connect-filter">How do you know the people you are connecting to?</label>
+	<label for="Connect-filter">How do you know the people you are connecting to?</label>
   </div>
   <div>
-  <select id="Connect-filter">
-      <option value="">--Please choose an option.--</option>
-      <option value="Work Colleagues">Work Colleagues</option>
-      <option value="Classmates">Classmates</option>
-      <option value="Met at a work-related event">Met at a work-related event</option>
-      <option value="Other">Other</option>
-      <option value="We don't know each other">We don't know each other</option>
-  </select>
+	<select id="Connect-filter">
+		<option value="">--Please choose an option.--</option>
+		<option value="Work Colleagues">Work Colleagues</option>
+		<option value="Classmates">Classmates</option>
+		<option value="Met at a work-related event">Met at a work-related event</option>
+		<option value="Other">Other</option>
+		<option value="We don't know each other">We don't know each other</option>
+	</select>
+  </div>
+  <div>
+	<label for="ConnectionCount">How many people do you want to connect to</label>
+  </div>
+  <div>
+	<input id="ConnectionCount" type="number" />
   </div>
   <input class="btn" type="submit" value="Submit" />
 </form>
