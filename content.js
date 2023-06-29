@@ -77,7 +77,7 @@ async function connectCodeBlock(filter, count, connectCount) {
                 close_button.click();
                 connectCount = connectCount - 1
             }
-            if ((connectCount === count) || (connectCount > count)) {
+            if ((Number(connectCount) === Number(count)) || (Number(connectCount) > Number(count))) {
                 break breakme;
             }
         }
