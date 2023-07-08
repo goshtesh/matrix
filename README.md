@@ -3,7 +3,7 @@
 
 Networking on LinkedIn is an incredible mechanism for career growth. Unfortunately, the process for building the network and staying in touch is tedious and time consuming.
 
-This chrome extension automates the most time consuming tasks - connecting with people on LinkedIn, sending messages, following up - and help users be more efficient in their outreach. Currently it works for automatically adding people in your 2nd degree network. All you have to do is go to people page on linkedin and filter for 2nd degree connection and click the "Start Connecting" button and the extension will automatically add everyone in the page.
+This chrome extension automates the most time consuming tasks - connecting with people on LinkedIn, sending messages, following up - and help users be more efficient in their outreach. Currently it works for automatically adding people in your 2nd degree network. All you have to do is go to people page on linkedin and filter for 2nd degree connection and click the "Start Connecting" button and the extension will automatically add everyone in the page..
 
 Before using this project, please consult the [Terms and Conditions](#terms-and-conditions) and [Legal Notice](#legal)
 
