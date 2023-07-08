@@ -3,7 +3,8 @@ function popup() {
     chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
         var activeTab = tabs[0];
         var connectFilter = document.getElementById("Connect-filter").value;
-        chrome.tabs.sendMessage(activeTab.id, { "message": "connectRequest", "connectFilter": connectFilter });
+        var connectionCount = document.getElementById("ConnectionCount").value;
+        chrome.tabs.sendMessage(activeTab.id, { "message": "connectRequest", "connectFilter": connectFilter, "connectionCount": connectionCount });
     });
 }
 
@@ -13,6 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function showDiv() {
     document.getElementById('SelectOptions').style.display = "block";
+    document.getElementById('ConnectionCount').value = 10;
 }
 document.addEventListener("DOMContentLoaded", function () {
     document.getElementById('ConnectAll').addEventListener("click", showDiv);
@@ -22,7 +24,6 @@ function messagepopup() {
     chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
         var activeTab = tabs[0];
         var message = document.getElementById("MessageAll").value;
-        console.log("message", message)
         chrome.tabs.sendMessage(activeTab.id, { "message": "messageRequest", "text": message });
     });
 }
