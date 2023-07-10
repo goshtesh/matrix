@@ -23,6 +23,10 @@
 
 		.container {
 			margin: 16px 16px 16px 16px;
+			border: 1px solid black;
+			border-radius: 10px;
+			padding: 10px;
+
 		}
 
 		h1 {
@@ -32,6 +36,7 @@
 			margin: 0 !important;
 		}
 
+		
 		.btn {
 			display: block;
 			height: 40px;
@@ -48,6 +53,7 @@
 		.btn.primary {
 			background: #2C4BFF;
 			color: #fff;
+			margin-bottom: 10px;
 		}
 
 		.btn.secondary {
@@ -72,10 +78,7 @@
 <h1>Connect with your 2nd degree</h1>
 <table id="people-table">
 </table>
-<button class="btn primary" id="ConnectAll">Start Connecting</button>
-</div>
-
-<div class="container">
+<button class="btn primary" id="ConnectAll">Start</button>
 <form id="SelectOptions" style="display:none;" class="answer_list" >
   <div>
   <label for="Connect-filter">How do you know the people you are connecting to?</label>
@@ -90,7 +93,7 @@
       <option value="We don't know each other">We don't know each other</option>
   </select>
   </div>
-  <input class="btn" type="submit" value="Submit" />
+  <input class="btn primary" type="submit" value="Submit" />
 </form>
 </div>
 
@@ -100,11 +103,13 @@
   <div>
     <input id="MessageAll" type="text" placeholder="Type your message"></input>
     <div>
+		<p></p>
     <label for="MessageAll">We will autopopulate the greeting!</label>
+		<p></p>
     </div>
   </div>
   <div>
-    <input class="btn" type="submit" value="Submit" />
+    <input class="btn primary" type="submit" value="Submit" />
   </div>
 </form>
 </div>
