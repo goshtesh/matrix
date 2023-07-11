@@ -86,7 +86,7 @@ async function connectCodeBlock(filter, count, connectCount) {
 
         await new Promise(r => setTimeout(r, 4000));
         next.click()
-        await new Promise(r => setTimeout(r, 2000));
+        await new Promise(r => setTimeout(r, 5000));
         connectCodeBlock(filter, count, connectCount)
     }
 }
@@ -137,11 +137,18 @@ async function messageCodeBlock(message) {
         message_buttons[i].click()
         await new Promise(r => setTimeout(r, 2000));
         greetings = ["Hello", "Hi", "Hey"]
-        let names = await getElementByXpath("//h2[contains(@class, 'msg-overlay-bubble-header__title')]/a", null)
-        var name = names.innerText || names.textContent
+        let names = await getElementByXpath("//h2[contains(@class, 'msg-overlay-bubble-header__title')]", null)
+        var nameInnerText = names.innerText || names.textContent
+        if (nameInnerText.includes("New message")) {
+            let names = await getElementByXpath("//a[contains(@class, 'profile-card-one-to-one__profile-link')]", null)
+            var nameArray = names.innerText || names.textContent
+            var name = nameArray.replace(/\n/g, '').trimStart().split(' ')[0];
+        }
+        else {
+            var name = nameInnerText.replace(/\n/g, '').trimStart().split(' ')[0];
+        }
         main_div = await getElementByXpath("//div[starts-with(@class, 'msg-form__msg-content-container')]", null)
         main_div.click()
-
         let sleep_option = await getRandomInt(5000, 10000);
         let greetings_options = await getRandomInt(0, greetings.length);
         let newmessage = greetings[greetings_options] + " " + name + " " + message
@@ -150,6 +157,8 @@ async function messageCodeBlock(message) {
 
         let paragraphs = await getElementByXpath("//div[starts-with(@class, 'msg-form__contenteditable')]//p", main_div);
         paragraphs.innerText = newmessage;
+
+        await new Promise(r => setTimeout(r, 5000));
 
         const event = new Event('input', { bubbles: true });
         await paragraphs.dispatchEvent(event);
