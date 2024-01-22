@@ -1,7 +1,7 @@
 chrome.runtime.onMessage.addListener(
     function (request, sender, sendResponse) {
         if (request.message === "connectRequest") {
-            connectCodeBlock(request.connectFilter, request.connectionCount, 0);
+            connectCodeBlock(request.connectFilter);
         }
     }
 );
@@ -15,80 +15,51 @@ chrome.runtime.onMessage.addListener(
 );
 
 
-async function connectCodeBlock(filter, count, connectCount) {
-    breakme: if (count > 0) {
-        async function getElementsByXpath(xpathToExecute) {
-            var result = [];
-            var nodesSnapshot = document.evaluate(xpathToExecute, document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
-            for (var i = 0; i < nodesSnapshot.snapshotLength; i++) {
-                result.push(nodesSnapshot.snapshotItem(i));
-            }
-            return result;
+async function connectCodeBlock(filter) {
+    async function getElementsByXpath(xpathToExecute) {
+        var result = [];
+        var nodesSnapshot = document.evaluate(xpathToExecute, document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+        for (var i = 0; i < nodesSnapshot.snapshotLength; i++) {
+            result.push(nodesSnapshot.snapshotItem(i));
         }
-        async function getElementByXpath(xpathToExecute, docValue) {
-            if (docValue === null) {
-                return document.evaluate(xpathToExecute, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-            } else {
-                return document.evaluate(xpathToExecute, docValue, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-            }
-        }
-
-        let all_buttons = await getElementsByXpath("//button/span[text()='Connect']/..");
-        await new Promise(r => setTimeout(r, 5000));
-
-        let connect_buttons = []
-        for (let btn of all_buttons) {
-            connect_buttons.push(btn)
-        }
-        await new Promise(r => setTimeout(r, 5000));
-        for (let btn of connect_buttons) {
-            btn.click()
-            await new Promise(r => setTimeout(r, 2000));
-            const sendInvite = document.getElementById("send-invite-modal").innerText
-            if (sendInvite.includes("Your invitation is almost on its way") || sendInvite.includes("You can customize this invitation")) {
-                send = await getElementsByXpath("//button[@aria-label='Send now']")
-                send[0].click()
-
-                await new Promise(r => setTimeout(r, 2000));
-                connectCount = connectCount + 1
-            } else if (sendInvite.includes("How do you know")) {
-                if (filter) {
-                    searchFilter = "//button[text()=" + JSON.stringify(filter) + "]"
-                } else {
-                    searchFilter = '//button[text()="Other"]'
-                }
-                const filterApply = await getElementsByXpath(searchFilter)
-                filterApply[0].click()
-                connect = await getElementsByXpath("//button[@aria-label='Connect']")
-                connect[0].click()
-                await new Promise(r => setTimeout(r, 2000));
-                send = await getElementsByXpath("//button[@aria-label='Send now']")
-                send[0].click()
-                await new Promise(r => setTimeout(r, 2000));
-                connectCount = connectCount + 1
-
-            } else {
-                let close_button = await getElementByXpath("//button[contains(@class, 'artdeco-modal__dismiss')]//li-icon[@type='cancel-icon']", null);
-                close_button.click();
-            }
-            error_message = await getElementsByXpath("//div[contains(@class, 'artdeco-toasts_toasts')]")
-            if (error_message[0].getElementsByClassName('artdeco-toast-item').length > 0) {
-                let close_button = await getElementByXpath("//button[contains(@class, 'artdeco-toast-item__dismiss')]//li-icon[@type='cancel-icon']", null);
-                close_button.click();
-                connectCount = connectCount - 1
-            }
-            if ((Number(connectCount) === Number(count)) || (Number(connectCount) > Number(count))) {
-                break breakme;
-            }
-        }
-        await new Promise(r => setTimeout(r, 1000));
-        next = await getElementByXpath("//div[contains(@class, 'artdeco-pagination')]/button/span[text()='Next']", null)
-
-        await new Promise(r => setTimeout(r, 4000));
-        next.click()
-        await new Promise(r => setTimeout(r, 5000));
-        connectCodeBlock(filter, count, connectCount)
+        return result;
     }
+
+    let all_buttons = await getElementsByXpath("//button/span[text()='Connect']/..");
+    await new Promise(r => setTimeout(r, 5000));
+
+    let connect_buttons = []
+    for (let btn of all_buttons) {
+        connect_buttons.push(btn)
+    }
+
+    await new Promise(r => setTimeout(r, 5000));
+    for (let btn of connect_buttons) {
+        btn.click()
+        await new Promise(r => setTimeout(r, 2000));
+        const sendInvite = document.getElementById("send-invite-modal").innerText
+        if (sendInvite.includes("Your invitation is almost on its way")) {
+            send = await getElementsByXpath("//button[@aria-label='Send now']")
+            send[0].click()
+            await new Promise(r => setTimeout(r, 2000));
+        } else if (sendInvite.includes("How do you know")) {
+            if (filter) {
+                searchFilter = "//button[text()=" + JSON.stringify(filter) + "]"
+            } else {
+                searchFilter = '//button[text()="Other"]'
+            }
+            const filterApply = await getElementsByXpath(searchFilter)
+            filterApply[0].click()
+            connect = await getElementsByXpath("//button[@aria-label='Connect']")
+            connect[0].click()
+            await new Promise(r => setTimeout(r, 2000));
+            send = await getElementsByXpath("//button[@aria-label='Send now']")
+            send[0].click()
+            await new Promise(r => setTimeout(r, 2000));
+        }
+    }
+
+
 }
 
 
@@ -137,18 +108,12 @@ async function messageCodeBlock(message) {
         message_buttons[i].click()
         await new Promise(r => setTimeout(r, 2000));
         greetings = ["Hello", "Hi", "Hey"]
-        let names = await getElementByXpath("//h2[contains(@class, 'msg-overlay-bubble-header__title')]", null)
-        var nameInnerText = names.innerText || names.textContent
-        if (nameInnerText.includes("New message")) {
-            let names = await getElementByXpath("//a[contains(@class, 'profile-card-one-to-one__profile-link')]", null)
-            var nameArray = names.innerText || names.textContent
-            var name = nameArray.replace(/\n/g, '').trimStart().split(' ')[0];
-        }
-        else {
-            var name = nameInnerText.replace(/\n/g, '').trimStart().split(' ')[0];
-        }
+        let names = await getElementByXpath("//h2[contains(@class, 'msg-overlay-bubble-header__title')]/a", null) || await getElementByXpath("//a[contains(@class, 'profile-card-one-to-one__profile-link')]", null)        
+
+        var name = names.innerText || names.textContent
         main_div = await getElementByXpath("//div[starts-with(@class, 'msg-form__msg-content-container')]", null)
         main_div.click()
+
         let sleep_option = await getRandomInt(5000, 10000);
         let greetings_options = await getRandomInt(0, greetings.length);
         let newmessage = greetings[greetings_options] + " " + name + " " + message
@@ -157,8 +122,6 @@ async function messageCodeBlock(message) {
 
         let paragraphs = await getElementByXpath("//div[starts-with(@class, 'msg-form__contenteditable')]//p", main_div);
         paragraphs.innerText = newmessage;
-
-        await new Promise(r => setTimeout(r, 5000));
 
         const event = new Event('input', { bubbles: true });
         await paragraphs.dispatchEvent(event);
@@ -172,7 +135,7 @@ async function messageCodeBlock(message) {
         await new Promise(r => setTimeout(r, 2000));
 
         //close div
-        let minimize_button = await getElementByXpath("//div[contains(@class, 'msg-overlay-bubble-header__controls')]//button/li-icon[@type='close']", null);
+        let minimize_button = await getElementByXpath("//button[contains(@class, 'msg-overlay-bubble-header__control') and .//*[name()='svg' and @data-test-icon='close-small']]", null);
         minimize_button.click();
         await new Promise(r => setTimeout(r, 2000));
     }
