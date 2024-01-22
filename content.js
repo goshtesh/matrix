@@ -9,7 +9,11 @@ chrome.runtime.onMessage.addListener(
 chrome.runtime.onMessage.addListener(
     function (request, sender, sendResponse) {
         if (request.message === "messageRequest") {
-            messageCodeBlock(request.text);
+            let contactedPeople = [];
+            chrome.storage.local.get("contactedPeople", function (result) {
+                contactedPeople = result.contactedPeople || [];
+                messageCodeBlock(request.text, contactedPeople);
+            });
         }
     }
 );
@@ -63,7 +67,7 @@ async function connectCodeBlock(filter) {
 }
 
 
-async function messageCodeBlock(message) {
+async function messageCodeBlock(message, contactedPeople) {
     async function getRandomInt(min, max) {
         min = Math.ceil(min);
         max = Math.floor(max);
@@ -108,34 +112,43 @@ async function messageCodeBlock(message) {
         message_buttons[i].click()
         await new Promise(r => setTimeout(r, 2000));
         greetings = ["Hello", "Hi", "Hey"]
-        let names = await getElementByXpath("//h2[contains(@class, 'msg-overlay-bubble-header__title')]/a", null)
-        var name = names.innerText || names.textContent
-        main_div = await getElementByXpath("//div[starts-with(@class, 'msg-form__msg-content-container')]", null)
-        main_div.click()
+        let names = await getElementByXpath("//h2[contains(@class, 'msg-overlay-bubble-header__title')]/a", null) || await getElementByXpath("//a[contains(@class, 'profile-card-one-to-one__profile-link')]", null)        
 
-        let sleep_option = await getRandomInt(5000, 10000);
-        let greetings_options = await getRandomInt(0, greetings.length);
-        let newmessage = greetings[greetings_options] + " " + name + " " + message
-        let subject = "Hello"
+        var fullName = names.innerText || names.textContent
+        var firstName = fullName.split(' ')[0];
+
+        if (contactedPeople.includes(firstName)) {
+            console.log(`Already contacted ${firstName}. Skipping.`);
+        }
+        else {
+            main_div = await getElementByXpath("//div[starts-with(@class, 'msg-form__msg-content-container')]", null)
+            main_div.click()
+
+            let sleep_option = await getRandomInt(5000, 10000);
+            let greetings_options = await getRandomInt(0, greetings.length);
+            let newmessage = greetings[greetings_options] + " " + firstName + "! " + message
+            let subject = "Hello"
 
 
-        let paragraphs = await getElementByXpath("//div[starts-with(@class, 'msg-form__contenteditable')]//p", main_div);
-        paragraphs.innerText = newmessage;
+            let paragraphs = await getElementByXpath("//div[starts-with(@class, 'msg-form__contenteditable')]//p", main_div);
+            paragraphs.innerText = newmessage;
 
-        const event = new Event('input', { bubbles: true });
-        await paragraphs.dispatchEvent(event);
-        // type subject of the message
-        // title = await getElementByXpath("//input[@class=' artdeco-text-input--input']", null).sendKeys(subject);
-        // await new Promise(r => setTimeout(r, 2000));
-        // send message
-        submit = await getElementByXpath("//button[@type='submit']", null);
-        submit.disabled = false;
-        await submit.click();
-        await new Promise(r => setTimeout(r, 2000));
-
+            const event = new Event('input', { bubbles: true });
+            await paragraphs.dispatchEvent(event);
+            // type subject of the message
+            // title = await getElementByXpath("//input[@class=' artdeco-text-input--input']", null).sendKeys(subject);
+            // await new Promise(r => setTimeout(r, 2000));
+            // send message
+            submit = await getElementByXpath("//button[@type='submit']", null);
+            submit.disabled = false;
+            await submit.click();
+            await new Promise(r => setTimeout(r, 2000));
+        }
         //close div
-        let minimize_button = await getElementByXpath("//div[contains(@class, 'msg-overlay-bubble-header__controls')]//button/li-icon[@type='close']", null);
+        let minimize_button = await getElementByXpath("//button[contains(@class, 'msg-overlay-bubble-header__control') and .//*[name()='svg' and @data-test-icon='close-small']]", null);
         minimize_button.click();
+        contactedPeople.push(firstName);
+        chrome.storage.local.set({ "contactedPeople": contactedPeople });
         await new Promise(r => setTimeout(r, 2000));
     }
 
