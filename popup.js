@@ -10,11 +10,6 @@ function showDiv() {
     document.getElementById('SelectOptions').style.display = "block";
 }
 
-function reset() {
-    chrome.storage.local.set({ "contactedPeople": [] });
-}
-
-
 function messagepopup() {
     chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
         var activeTab = tabs[0];
@@ -26,6 +21,5 @@ function messagepopup() {
 document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("SelectOptions").addEventListener("submit", popup);
     document.getElementById('ConnectAll').addEventListener("click", showDiv);
-    document.getElementById('resetButton').addEventListener("click", reset);
     document.getElementById('theForm').addEventListener("submit", messagepopup);
 });
