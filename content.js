@@ -42,7 +42,7 @@ async function connectCodeBlock(filter) {
         btn.click()
         await new Promise(r => setTimeout(r, 2000));
         const sendInvite = document.getElementById("send-invite-modal").innerText
-        if (sendInvite.includes("Your invitation is almost on its way")) {
+        if (sendInvite.includes("You can customize this invitation")) {
             send = await getElementsByXpath("//button[@aria-label='Send now']")
             send[0].click()
             await new Promise(r => setTimeout(r, 2000));
