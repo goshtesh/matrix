@@ -42,7 +42,7 @@ async function connectCodeBlock(filter) {
         btn.click()
         await new Promise(r => setTimeout(r, 2000));
         const sendInvite = document.getElementById("send-invite-modal").innerText
-        if (sendInvite.includes("You can customize this invitation")) {
+        if (sendInvite.includes("Your invitation is almost on its way") || sendInvite.includes("You can customize this invitation")) {
             send = await getElementsByXpath("//button[@aria-label='Send now']")
             send[0].click()
             await new Promise(r => setTimeout(r, 2000));
@@ -60,6 +60,10 @@ async function connectCodeBlock(filter) {
             send = await getElementsByXpath("//button[@aria-label='Send now']")
             send[0].click()
             await new Promise(r => setTimeout(r, 2000));
+        }
+        else {
+                let close_button = document.querySelector("button#ember2449.artdeco-button.artdeco-button--circle.artdeco-button--muted.artdeco-button--2.artdeco-button--tertiary.ember-view.artdeco-modal__dismiss");
+                close_button.click();
         }
     }
 
